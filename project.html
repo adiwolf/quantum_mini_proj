@@ -1,0 +1,942 @@
+<html dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>כיצד משתמשים ב-Qiskit?</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+    direction: ltr;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1ebe223a-14bf-478b-931f-30502badf462" class="page sans"><header><h1 class="page-title">כיצד משתמשים ב-Qiskit?</h1></header><div class="page-body"><p id="cb78dd75-6859-40bc-942b-4e734bb61af4" class="">יש שתי דרכים עיקריות שניתן להשתמש בהן על מנת ליצור מעגלים קוונטיים ולהריץ אותם דרך המערכת של IBM:</p><ol type="1" id="72e235de-376a-4af2-a33c-ff390b409ff3" class="numbered-list" start="1"><li>שימוש בכלי ה-<a href="https://quantum-computing.ibm.com/composer">Composer</a> של IBM אשר מאפשר בניית מעגלים באמצעות ממשק גרפי.</li></ol><ol type="1" id="e0c1fcb2-b5a6-4912-bf8b-24d65a40a9fe" class="numbered-list" start="2"><li>שימוש בשפת התכנות Python בשילוב עם חבילת התוכנה qiskit.</li></ol><p id="9678db02-67da-44e0-aae2-9ff0f3486b31" class="">בעוד שהגישה הראשונה מועילה להתנסויות ובדיקות מהירות, הגישה השניה, לאחר שמתרגלים אליה, מאפשרת עבודה מורכבת ונוחה יותר.</p><p id="c630856e-da63-487f-a581-26a158d99e55" class="">לא נציג כאן לעומק את העבודה עם Python ו-qiskit אלא נסתפק במעט הנדרש על מנת לפתור את התרגיל.</p><p id="0e9ca54a-b103-4b72-9a0c-12b4f11933e9" class="">לאחר התקנת Python, כדי להתקין את החבילות להן נזדקק ניתן להשתמש בפקודה</p><pre id="66d363ea-6695-421d-86c3-b5b6178a9a05" class="code"><code>pip install qiskit qiskit-aer</code></pre><p id="19415e34-9a7f-4b1a-a02e-b174433f6533" class="">זה יתקין את החבילה הראשית (qiskit) ואת החבילה שכוללת את הסימולטור הקוונטי שבו נשתמש (qiskit-aer).</p><p id="07d9196f-1044-480a-9760-ae79ff831688" class="">
+</p><p id="59c4e641-cddc-4cdc-98c7-d810201efcb0" class="">במקום תוכנית “Hello World” סטנדרטית נכתוב תוכנית שבונה מעגל לייצור מצב שזור ומדידה שלו, ואז מריצה עליו סימולטור, ומדפיסה את המעגל ואת תוצאות הרצת הסימולטור:</p><pre id="163da5ff-1608-41ee-ad65-502a6642c26a" class="code"><code>from qiskit import QuantumCircuit
+from qiskit_aer import Aer
+
+circuit = QuantumCircuit(2)
+circuit.h(0)
+circuit.cx(0,1)
+circuit.measure_all()
+
+simulator = Aer.get_backend(&#x27;aer_simulator&#x27;)
+
+counts = simulator.run(circuit).result().get_counts()
+
+print(circuit)
+print(counts)</code></pre><p id="bd538d1f-6b81-430c-a447-cb9518fecfbf" class="">הרצת התוכנית תניב פלט הדומה לזה:</p><pre id="0fcebcd3-72f4-4062-934d-3adfc4101e87" class="code"><code>        ┌───┐      ░ ┌─┐   
+   q_0: ┤ H ├──■───░─┤M├───
+        └───┘┌─┴─┐ ░ └╥┘┌─┐
+   q_1: ─────┤ X ├─░──╫─┤M├
+             └───┘ ░  ║ └╥┘
+meas: 2/══════════════╩══╩═
+                      0  1
+{&#x27;11&#x27;: 515, &#x27;00&#x27;: 509}</code></pre><p id="ee370aae-a79b-428d-b48c-6553d3d2182c" class="">מכיוון שהפונקציה <code>run</code> שבה הסימולטור משתמש מריצה את המעגל 1024 פעמים כברירת מחדל וסופרת תוצאות (ניתן לשלוט על מספר הפעמים עם הפרמטר <code>shots</code> שמועבר לפקודה <code>run</code> אך לא יהיה בכך צורך בתרגיל).</p><p id="679510f7-a6f3-44b7-886c-2a9c3e25d491" class="">נראה דוגמא נוספת, שבה משתמשים בלולאה כדי להוסיף חלק מהשערים. כאן אנו בונים מעגל שמחשב את הפונקציה שהופכת את הקיוביטים השני, הרביעי והחמישי (שימו לב שהאינדקסים מתחילים ב-0) ומחברת (מודולו 2) לקיוביט השביעי את ששת הקיוביטים הראשונים.</p><pre id="1640ad77-dfe4-4da0-a675-a7f4da194fa3" class="code"><code>from qiskit import QuantumCircuit
+from qiskit_aer import Aer
+
+circuit = QuantumCircuit(7)
+circuit.x(1)
+circuit.x(3)
+circuit.x(4)
+for qubit in range(6):
+    circuit.cx(qubit,6)
+circuit.measure_all()
+
+simulator = Aer.get_backend(&#x27;aer_simulator&#x27;)
+
+counts = simulator.run(circuit).result().get_counts()
+
+print(circuit)
+print(counts)</code></pre><p id="c48a93a7-dc86-4e3d-8245-173a5ba3749a" class="">הפלט של המעגל הזה הוא דטרמיניסטי:</p><pre id="0cb57bdc-4c22-4f0d-9344-4b7f1b36eba9" class="code"><code>                                            ░ ┌─┐
+   q_0: ───────■────────────────────────────░─┤M├──────────────────
+        ┌───┐  │                            ░ └╥┘┌─┐
+   q_1: ┤ X ├──┼────■───────────────────────░──╫─┤M├───────────────
+        └───┘  │    │                       ░  ║ └╥┘┌─┐
+   q_2: ───────┼────┼────■──────────────────░──╫──╫─┤M├────────────
+        ┌───┐  │    │    │                  ░  ║  ║ └╥┘┌─┐
+   q_3: ┤ X ├──┼────┼────┼────■─────────────░──╫──╫──╫─┤M├─────────
+        ├───┤  │    │    │    │             ░  ║  ║  ║ └╥┘┌─┐
+   q_4: ┤ X ├──┼────┼────┼────┼────■────────░──╫──╫──╫──╫─┤M├──────
+        └───┘  │    │    │    │    │        ░  ║  ║  ║  ║ └╥┘┌─┐
+   q_5: ───────┼────┼────┼────┼────┼────■───░──╫──╫──╫──╫──╫─┤M├───
+             ┌─┴─┐┌─┴─┐┌─┴─┐┌─┴─┐┌─┴─┐┌─┴─┐ ░  ║  ║  ║  ║  ║ └╥┘┌─┐
+   q_6: ─────┤ X ├┤ X ├┤ X ├┤ X ├┤ X ├┤ X ├─░──╫──╫──╫──╫──╫──╫─┤M├
+             └───┘└───┘└───┘└───┘└───┘└───┘ ░  ║  ║  ║  ║  ║  ║ └╥┘
+meas: 7/═══════════════════════════════════════╩══╩══╩══╩══╩══╩══╩═
+                                               0  1  2  3  4  5  6
+{&#x27;1011010&#x27;: 1024}</code></pre><p id="6e2ca8b0-39d7-4486-ad14-15308239ebe2" class="">שימו לב בפרט לכך שמחרוזת הפלט <code>1011010</code> היא בסדר <strong><strong><strong><strong>הפוך</strong></strong></strong></strong> ממה שאולי היה ניתן לצפות: ערכו של קיוביט 0 הוא הימני ביותר, וערכו של קיוביט 6 הוא השמאלי ביותר. זה האופן שבו מתקבל הפלט ב-Qiskit.</p><h1 id="807e9fc1-c29b-48c2-bed9-4287e6fb51a6" class="">מה המשימה שיש לבצע?</h1><p id="b6ae5967-2296-4b63-8f61-5b462f17d79b" class="">מטרת התרגיל היא לממש את הפונקציות החסרות בקובץ <a href="http://dj.py"><code>dj.py</code></a> שקיבלתם:</p><pre id="f0a40165-90c0-43a7-bf8f-670b146e777b" class="code"><code>from qiskit import QuantumCircuit
+import random
+
+def generate_const_oracle(n):
+    &quot;&quot;&quot;
+    Returns a circuit computing a constant function
+
+    Parameters
+    ----------
+    n: The number of of input qubits for the oracle
+
+    Returns
+    -------
+    A `QuantumCircuit` on `n+1` qubits, 
+    computing the function f(x_1,...,x_n, y) = (x_1,...,x_n, y+b)
+    where b is a random bit
+    &quot;&quot;&quot;
+
+def generate_balanced_oracle(b_str):
+    &quot;&quot;&quot;
+    Returns a circuit computing a balanced function
+
+    Parameters
+    ----------
+    b_str : A string describing the balanced oracle
+
+    Returns
+    -------
+    A `QuantumCircuit` on `n+1` qubits, where the length of b_str is `n`, 
+    computing the function f(x_1,...,x_n, y) = (x_1,...,x_n, y+(-1)^a_1*x_1+...+(-1)^a_n*x_n)
+    where a_1,...,a_n are the bits given in b_str
+
+    Note: This function assums b_str is correct 
+    (i.e. a string of the characters &#x27;0&#x27; and &#x27;1&#x27;, not all &#x27;0&#x27;)
+    &quot;&quot;&quot;
+
+def generate_dj_circuit(n, oracle):
+    &quot;&quot;&quot;
+    Returns a circuit for the Deutsch–Jozsa algorithm for n qubits
+    for the given oracle
+
+    Parameters
+    ----------
+    n: The number of of input qubits for the oracle
+    oracle: An oracle computing a function f(x_1,...,x_n, y) which can be
+    either constant or balanced.
+
+    Note: f is represented using a quantum circuit on `n+1` qubits; the last qubit is
+    used for the output.
+
+    Returns
+    -------
+    A `QuantumCircuit` on `n+1` qubits, implementing the Deutsch–Jozsa algorithm.
+    When running the circuit on a quantum computer, the expected results are either
+    &#x27;00...0&#x27; if the oracle is constant, or different if it is balanced
+    &quot;&quot;&quot;
+    
+def dj_algorithm(n, oracle, backend):
+    &quot;&quot;&quot;
+    Runs the Deutsch–Jozsa algorithm on the given oracle
+    for the given oracle
+
+    Parameters
+    ----------
+    n: The number of of input qubits for the oracle
+    oracle: An oracle computing a function f(x_1,...,x_n, y) which is guaranteed
+    to be either constant or balanced
+    backend: The quantum backend (simulator/quantum computer) to run the algorithm on
+
+    Returns
+    -------
+    The string &quot;CONSTANT&quot; if the oracle represents a constant function,
+    and &quot;BALANCED&quot; if it represents a balanced function
+    &quot;&quot;&quot;
+
+def bv_algorithm(n, oracle, backend):
+    &quot;&quot;&quot;
+    Runs the Bernstein–Vazirani algorithm on the given oracle
+
+    Parameters
+    ----------
+    n: The number of of input qubits for the oracle
+    oracle: An oracle computing a function f which is guaranteed to be
+    of the form f(x_1,...,x_n, y) = (x_1,...,x_n,  y+a_1x_1+...+a_nx_n)
+    backend: The quantum backend (simulator/quantum computer) to run the algorithm on
+
+    
+    Returns
+    -------
+    A list on integers [a_1, a_2,...,a_n] corresponding to the function f
+    computer by the oracle
+    &quot;&quot;&quot;</code></pre><p id="681e6883-ea53-485f-8f39-1744aa088527" class="">הסבר לגבי מה שהפונקציות אמורות לעשות:</p><p id="2b71b7ca-a749-4d7d-b0e8-5e96fc843327" class="">הפונקציה <code>generate_const_oracle</code> אמורה להחזיר <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>מעגל קוונטי</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong> שמייצג פונקציה קבועה כפי שתוארה בקובץ המבוא המתמטי: דהיינו, פלטי המעגל זהים לקלטים למעט עבור הקלט האחרון, שלערכו מתווסף ערך קבוע כלשהו שאינו תלוי בערכי הקלט (הערך הקבוע נתון לבחירתכם ויכול להיבחר באקראי).</p><p id="2bab4a52-9c47-47b0-90b6-fa6de8a5a2be" class="">הפונקציה <code>generate_balanced_oracle</code> אמורה להחזיר <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>מעגל קוונטי</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong> שמייצג פונקציה מאוזנת שמתוארת על ידי המחרוזת <code>b_str</code>. אם אברי <code>b_str</code> הם סדרת הערכים הבינאריים <code>a_1, a_2, ..., a_n</code> אז הפונקציה אמורה להיות <code>f(x_1,...,x_n, y) = (x_1,...,x_n, y+(a_1+x_1)+...+(a_n+x_n))</code> (כדאי לבדוק מדוע היא פונקציה מאוזנת).</p><p id="4989d003-4f90-4895-b59f-767df57b1e43" class="">הפונקציה <code>generate_dj_circuit</code> אמורה לקבל מעגל קוונטי שמייצג אורקל, ואת מספר הקיוביטים שלו <strong><strong><strong><strong><strong><strong><strong>לא כולל</strong></strong></strong></strong></strong></strong></strong> קיוביט העזר, ולהוציא כפלט מעגל אשר מממש את אלגוריתם דויטש-ג’וזה בהתאם למבנה</p><figure id="90dc05ea-a42b-4b34-ba94-ba1157d7c788" class="image"><a href="%D7%9B%D7%99%D7%A6%D7%93%20%D7%9E%D7%A9%D7%AA%D7%9E%D7%A9%D7%99%D7%9D%20%D7%91-Qiskit%201ebe223a14bf478b931f30502badf462/Untitled.png"><img style="width:430px" src="images/Untitled.png"/></a></figure><p id="04a1c042-0e1e-406f-8a1a-70a3c23dd99a" class=""> הפונקציה <code>dj_algorithm</code> אמורה להריץ את אלגוריתם דויטש-ג’וזה. היא מקבלת אורקל, את מספר הקיוביטים שלו <strong><strong><strong><strong><strong><strong><strong>לא כולל</strong></strong></strong></strong></strong></strong></strong> קיוביט העזר, ואת ה-<code>backend</code> שמטרתו להריץ את המעגל בפועל, ומטרתה להחזיר את המחרוזת <code>&quot;CONSTANT&quot;</code> במקרה שהאורקל מייצג פונקציה קבועה, או את המחרוזת <code>&quot;BALANCED&quot;</code> אם האורקל מייצג פונקציה מאוזנת.</p><p id="174379af-5d34-4495-8535-acae01091573" class="">שימו לב לכך ש-<code>backend</code> עשוי להיות גם סימולטור וגם מחשב קוונטי אמיתי; אם תרצו להריץ על מחשב קוונטי אמיתי עיינו בהסברים שבסוף מסמך זה; אם האלגוריתם שלכם יעבוד עבור סימולטור זה טוב דיו.</p><p id="8d581ee7-e589-4f45-ad09-200ae06efa85" class="">הפונקציה <code>bv_algorithm</code> אמורה להריץ את אלגוריתם ברנשטיין-וזירני. . היא מקבלת אורקל, את מספר הקיוביטים שלו <strong><strong><strong><strong><strong><strong><strong>לא כולל</strong></strong></strong></strong></strong></strong></strong> קיוביט העזר, ואת ה-<code>backend</code> שמטרתו להריץ את המעגל בפועל, ומטרתה להחזיר רשימה <code>[a_1, a_2, ... , a_n]</code> של ביטים כך שהאורקל מממש את הפונקציה</p><p id="7185e318-61f9-4b30-82c8-e4bd78183b3b" class=""> <code>f(x_1,...,x_n, y) = (x_1,...,x_n, y+a_1*x_1+...+a_n*x_n)</code></p><h1 id="a736a400-bbe9-4000-a0aa-7fd64c977cd4" class="">כיצד בודקים את נכונות הקוד שלכם?</h1><p id="3d5de6b4-87b1-44e9-b2f9-30af2cf0ae69" class="">לנוחותכם, צירפנו תוכנית שמבצעת בדיקה אוטומטית לנכונות הקוד שלכם. נסביר כאן כיצד היא פועלת.</p><pre id="92fe5e7e-fdd5-4d24-95c8-0e92664774da" class="code"><code>import unittest
+import random
+from qiskit_aer import Aer
+from qiskit.quantum_info import CNOTDihedral
+from qiskit.circuit.library.generalized_gates import LinearFunction
+import dj
+
+class TestOracles(unittest.TestCase):
+    def test_const_oracle(self):
+        for n in range(1,5):
+            circ = dj.generate_const_oracle(n)
+            func = CNOTDihedral(circ).linear[n][:n]
+            self.assertTrue(all(x == 0 for x in func))
+
+    def test_balanced_oracle(self):
+        for n in range(1,5):
+            bitstring = &quot;&quot;.join(random.choices([&#x27;0&#x27;, &#x27;1&#x27;], k=n))
+            circ = dj.generate_balanced_oracle(bitstring)
+            func = CNOTDihedral(circ).linear[n][:n]
+            self.assertFalse(all(x == 0 for x in func), msg=f&quot;Failure on bitstring {bitstring}&quot;)
+
+class TestAlgorithm(unittest.TestCase):
+    def test_dj(self):
+        simulator = Aer.get_backend(&#x27;aer_simulator&#x27;)
+        for n in range(1,5):
+            # Constant oracle
+            oracle = dj.generate_const_oracle(n)
+            result = dj.dj_algorithm(n, oracle, simulator)
+            self.assertEqual(result, &quot;CONSTANT&quot;)
+
+            # Balanced oracle
+            bitstring = &quot;&quot;.join(random.choices([&#x27;0&#x27;, &#x27;1&#x27;], k=n))
+            oracle = dj.generate_balanced_oracle(bitstring)
+            result = dj.dj_algorithm(n, oracle, simulator)
+            self.assertEqual(result, &quot;BALANCED&quot;)
+
+    def test_bv(self):
+        simulator = Aer.get_backend(&#x27;aer_simulator&#x27;)
+        a = [1,0,0,0,1,1,0,1]
+        n = len(a)
+        matrix = [[row == col for col in range(n+1)] for row in range(n+1)]
+        for col in range(n):
+            matrix[n][col] = (a[col] == 1)
+
+        circ = LinearFunction(matrix).synthesize()
+        result = dj.bv_algorithm(n, circ, simulator)
+        self.assertEqual(result, a)
+
+
+if __name__ == &#x27;__main__&#x27;:
+    unittest.main()</code></pre><p id="1ceb13ec-7d4c-43ae-b6bf-6f2dd1c65409" class="">התוכנית מתבססת על ספריית <code>unittest</code> הסטנדרטית של פייתון. השורות</p><pre id="8c10fed8-b81b-460d-95c5-4864402d4908" class="code"><code>if __name__ == &#x27;__main__&#x27;:
+    unittest.main()</code></pre><p id="077ca435-0e14-4d03-8dac-8125538afaef" class="">בסוף הקוד משמעותן שאם הקובץ מורץ כמות שהוא, הבדיקות של <code>unittest</code> מופעלות. הפלט הצפוי מהרצה שכזו, בהנחה שמימשתם את כל הקוד שלכם בצורה תקינה, הוא</p><pre id="f312fbc6-acc2-4f13-8bb5-5b86c310a7db" class="code"><code>....
+----------------------------------------------------------------------
+Ran 4 tests in 0.058s
+
+OK</code></pre><p id="e08f054f-5a9b-43d6-834c-b3bf32463731" class="">כאן ארבע הנקודות שבשורה הראשונה מייצגות את ארבעת המבחנים שהספרייה <code>unittest</code> הריצה. מבחן שנכשל מופיע לא בתור נקודה אלא בתור E (אם התקבלה שגיאה) או F (אם אחת מהבדיקות שבמסגרת המבחן נכשלה).</p><p id="1d81f30f-8fd0-4287-8b7d-0a9a0fe1e397" class="">הקוד עצמו מחולק ל<strong><strong><strong><strong><strong><strong>מחלקות</strong></strong></strong></strong></strong></strong>. כל מחלקה מייצגת אוסף של מבחנים סביב נושא מסויים (בשימושים מתקדמים יותר מחלקה עשויה לכלול גם פונקציות עזר, פונקציות לאתחול וסיום שמופעלות בתחילת וסוף כל מבחן, וכדומה). בכל מחלקה הפונקציות ששמן מתחיל ב-test הן מבחנים שיופעלו אוטומטית על ידי <code>unittest</code>.</p><p id="9dd1bd5a-eeaa-4fa0-a971-a057ad672e2e" class="">כך מופיע בתחילת הקוד:</p><p id="3bce21f1-daa8-4642-ac46-ed7e51ee0706" class="">
+</p><pre id="44dab91e-2ddc-4339-ae50-8b395d88d4a5" class="code"><code>class TestOracles(unittest.TestCase):
+    def test_const_oracle(self):
+        for n in range(1,11):
+            circ = dj.generate_const_oracle(n)
+            func = CNOTDihedral(circ).linear[n][:n]
+            self.assertTrue(all(x == 0 for x in func))</code></pre><p id="a88e8b0a-236e-4b5a-aac8-a5e8bc4f19fa" class="">קוד זה מגדיר את המחלקה <code>TestOracles</code> שמיועדת לבדיקת המימוש של פונקציות ייצור האורקלים. הפונקציה <code>test_const_oracle</code> בודקת שהאורקל עבור פונקציה קבועה יוצר בצורה תקינה.</p><p id="f7ea638a-5ef7-4620-bacb-5990166c94d0" class="">הקוד עצמו עובר על מספרי הקיוביטים מ-1 עד 10 (הפונקציה <code>range(a,b)</code> של פייתון מחזירה את כל המספרים מ-a עד b לא כולל b עצמו). לאחר מכן הקוד קורא לפונקציה שאותה עליכם לממש שמייצרת מעגל עבור האורקל, ולאחר מכן נעשה שימוש באחד מהכלים המתקדמים של Qiskit שממיר את המעגל לייצוג של הפונקציה שהוא מתאר (זה עובד רק עבור מעגלים עם מבנה מסויים מאוד; המעגל שאותו תבנו עלול להפיל את המבחן בשלב הזה, אבל פירוש הדבר הוא שקיים מימוש פשוט בהרבה מזה שבחרתם בו). לבסוף מתבצעת בדיקה שהפונקציה המחושבת היא אכן קבועה.</p><p id="eb8e87f1-2e4c-4b91-aabc-ef91b4c5accc" class="">אין צורך להבין את הבדיקה המתבצעת בסיום, אבל הנה הסבר למקרה הצורך: הפונקציה שאותה האורקל אמור לחשב היא</p><p id="b3fad69c-414d-479d-8c0f-1de2e6f2c896" class="">f(x_1,…,x_n, y) = (x_1,…, x_n, y+b)</p><p id="0128c72e-8f27-4a8e-95b8-4d8ddd1c0cbd" class="">כך ש-b קבוע. בכתיב וקטורי, אפשר לחשוב על הפונקציה בתור f(x)=x+B כך ש-B וקטור (שכולו אפסים למעט הכניסה האחרונה שהיא 0). פונקציה כזו מכונה <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>פונקציה אפינית</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>. היא מורכבת מפונקציה לינארית, f(x)=x, ועוד קבוע B.</p><p id="3a498948-23ae-488d-9f13-d18e275fced7" class="">בעזרת המחלקה <code>CNOTDihedral</code> המעגל של האורקל מומר לייצוג בתור פונקציה אפינית, והחלק של <code>linear[n][:n]</code> בקוד אומר “תנו לי את החלק הלינארי של הפונקציה האפינית, כשהוא מיוצג בתור מטריצה; תנו לי את השורה האחרונה במטריצה; תנו לי את כל העמודות פרט לאחרונה בשורה הזו”. מכיוון שהפונקציה הלינארית אמורה להיות הזהות, המטריצה אמורה להיות מטריצת היחידה, ולכן כל הכניסות פרט לאחרונה אמורות להיות 0; זו הבדיקה שמתבצעת בפועל בשורה הבאה.</p><pre id="3b5686ae-367e-47fd-83ee-b9d328c2b141" class="code"><code>def test_balanced_oracle(self):
+        for n in range(1,11):
+            bitstring = &quot;&quot;.join(random.choices([&#x27;0&#x27;, &#x27;1&#x27;], k=n))
+            circ = dj.generate_balanced_oracle(bitstring)
+            func = CNOTDihedral(circ).linear[n][:n]
+            self.assertFalse(all(x == 0 for x in func), msg=f&quot;Failure on bitstring {bitstring}&quot;)</code></pre><p id="7d4d48cf-2349-4fa2-a94c-de10f3e2df9f" class="">קטע הקוד הזה שבודק את יצירת האורקל לפונקציה מאוזנת עובד באותו האופן. הבדיקה בשורה האחרונה מוודאת שהפונקציה הנוצרת היא לינארית שאינה קבועה; פונקציה כזו בהכרח תהיה מאוזנת (פונקציות לא מאוזנות לא יהיו לינאריות ולכן כבר שלב יצירת ה-<code>CNOTDihedral</code> בשורה הקודמת ייכשל).</p><pre id="2223e425-f1d1-4ef8-aaf2-35f0b9e42bf8" class="code"><code>class TestAlgorithm(unittest.TestCase):
+    def test_dj(self):
+        simulator = Aer.get_backend(&#x27;aer_simulator&#x27;)
+        for n in range(1,11):
+            # Constant oracle
+            oracle = dj.generate_const_oracle(n)
+            result = dj.dj_algorithm(n, oracle, simulator)
+            self.assertEqual(result, &quot;CONSTANT&quot;)
+
+            # Balanced oracle
+            bitstring = &quot;&quot;.join(random.choices([&#x27;0&#x27;, &#x27;1&#x27;], k=n))
+            oracle = dj.generate_balanced_oracle(bitstring)
+            result = dj.dj_algorithm(n, oracle, simulator)
+            self.assertEqual(result, &quot;BALANCED&quot;)</code></pre><p id="e3511a35-2e6c-452d-8b6d-2be3d88254cf" class="">קטע הקוד הזה מתחיל את בדיקת האלגוריתמים (דויטש-ג’וזה וברנשטיין-וזירני). הבדיקה הראשונה מייצרת אורקלים קבועים/מאוזנים, מעבירה אותם לפונקציה שמממשת את דויטש-ג’וזה ובודקת שהתקבל הפלט הצפוי.</p><pre id="808d332f-de29-48f0-8149-df20953b9332" class="code"><code>def test_bv(self):
+        simulator = Aer.get_backend(&#x27;aer_simulator&#x27;)
+        a = [1,0,0,0,1,1,0,1]
+        n = len(a)
+        matrix = [[row == col for col in range(n+1)] for row in range(n+1)]
+        for col in range(n):
+            matrix[n][col] = (a[col] == 1)
+
+        circ = LinearFunction(matrix).synthesize()
+        result = dj.bv_algorithm(n, circ, simulator)
+        self.assertEqual(result, a)</code></pre><p id="9ab7138d-8933-4f7e-b78a-11ee4d0d0930" class="">הבדיקה עבור ברנשטיין-וזירני מסובכת מעט יותר. ראשית הפונקציה בונה מטריצה ספציפית שמתארת את הפונקציה הלינארית f(x)=a*x (כאשר כאן * מתאר מכפלה סקלרית מעל Z_2) עבור הוקטור a הספציפי שמוגדר בקוד; אחר כך נעשה שימוש במחלקה <code>LinearFunction</code> של Qiskit כדי לבנות מעגל אשר מממש אותה, ולבסוף מורץ האלגוריתם של ברנשטיין-וזירני על המעגל הזה מתוך ציפייה לקבל חזרה את הוקטור a.</p><h1 id="143724aa-8444-4152-80d9-c8d963880f00" class="">כיצד מריצים מעגלים על מחשב קוונטי אמיתי?</h1><p id="9239a89d-f268-4fed-a637-cbdec6e588e5" class="">ניתן להירשם בחינם לשירות <a href="https://quantum-computing.ibm.com/">IBM Quantum</a> שמאפשר גישה למחשבים קוונטיים וממשק גרפי עבור בניית מעגלים (שלא נשתמש בו כאן).</p><p id="bd7f6f20-958a-4a05-8de9-a431b57bb1c2" class="">לאחר הרשמה וכניסה ללוח הבקרה, ניתן להעתיק את ה-API Token שלכם:</p><figure id="bf3ccfa2-f46f-4b14-ab64-4d19844ebc29" class="image"><a href="%D7%9B%D7%99%D7%A6%D7%93%20%D7%9E%D7%A9%D7%AA%D7%9E%D7%A9%D7%99%D7%9D%20%D7%91-Qiskit%201ebe223a14bf478b931f30502badf462/Untitled%201.png"><img style="width:375px" src="images/Untitled%201.png"/></a></figure><p id="5bdecb3b-fc7f-445f-82d3-2c488b8ccae8" class="">ניתן לעשות עם ה-Token אחד משניים: להעביר אותו במפורש בכל הרצה שבה ניגשים למחשבים הקוונטיים של IBM, או לשמור אותו על המחשב ולאפשר לקוד לגשת אליו אוטומטית. כדי לשמור את ה-Token על המחשב הריצו את קטע הקוד הבא:</p><pre id="7aa4da8a-1f19-4d15-b351-ef425fee3cee" class="code"><code>from qiskit import IBMQ
+IBMQ.save_account(token=&quot;&lt;MY TOKEN&gt;&quot;)</code></pre><p id="86c304c9-3216-4624-8e37-a305e5fc764c" class="">כמובן, תוך החלפת <code>&lt;MY TOKEN&gt;</code> בערכו האמיתי של ה-Token שקיבלתם.</p><p id="90b33103-d55a-472d-973f-f66bfa6fdf7c" class="">כעת, על מנת לגשת למחשב קוונטי של IBM ניתן לבצע את הדבר הבא:</p><pre id="b1cddaf5-ef23-4fe8-8339-5c4c4a319999" class="code"><code>from qiskit import QuantumCircuit, IBMQ, transpile
+from qiskit.providers.ibmq import least_busy
+
+IBMQ.load_account()
+provider = IBMQ.get_provider(hub=&#x27;ibm-q&#x27;, group=&#x27;open&#x27;, project=&#x27;main&#x27;)
+backend = least_busy(provider.backends(simulator=False, min_num_qubits=5))</code></pre><p id="fcf0adde-d8f2-4748-a62b-31bdd5f4e31f" class="">קוד זה מתחבר לשרת, משיג <code>provider</code> שהוא רכיב התוכנה שנותן גישה לאחד מהמחשבים הקוונטיים, ובקוד הנוכחי משמש לקבלת גישה למחשב קוונטי <code>backend</code> שהוא הפנוי ביותר כרגע (קיימות דרכים אחרות לגשת למחשבים, למשל ישירות על פי שם המחשב המבוקש).</p><p id="a4d04948-4e03-44e4-886c-3a516253f054" class="">
+</p><p id="cb3f755c-3a38-48f4-93da-d72d62409c3e" class="">אם ה-Token לא נשמר על המחשב, ההבדל היחיד הוא בשורות</p><pre id="92438afa-c566-474a-8791-8419c0d3c90f" class="code"><code>IBMQ.load_account()
+provider = IBMQ.get_provider(hub=&#x27;ibm-q&#x27;, group=&#x27;open&#x27;, project=&#x27;main&#x27;)</code></pre><p id="c7fdf6e0-8a22-4904-87d1-94e1ae7b4ac6" class="">שמוחלפת ב-</p><pre id="68f6db5a-e890-4437-8ab1-5455bb7e3cd7" class="code"><code>provider = IBMQ.enable_account(token=&quot;&lt;MY TOKEN&gt;&quot;, hub=&#x27;ibm-q&#x27;, group=&#x27;open&#x27;, project=&#x27;main&#x27;)</code></pre><p id="1c126e8a-8f4d-4bdb-b8f6-6ee230da459b" class="">לאחר מכן ניתן להשתמש ב-<code>backend</code> על מנת להריץ מעגלים בדיוק כפי שזה בוצע עם הסימולטור, למעט הבדל אחד אבל קריטי: בניגוד לסימולטור, המחשבים הקוונטיים מסוגלים להתמודד רק עם מעגלים שבנויים מסט ספציפי של שערים ועם מגבלות על זוגות הקיוביטים שניתן לבצע עליהם פעולת CX. על מנת להפוך את האספקט הזה לשקוף למשתמש, ניתן לבצע פעולה שנקראת <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>טרנספילציה</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong> שממירה את המעגל הקוונטי של המשתמש במעגל קוונטי שקול שניתן להריץ על מחשב ספציפי (בדומה לפעולת קומפליציה).</p><p id="991b68b8-98df-42c8-a897-780e0d3539d1" class="">מכיוון שלמחשבים שונים דרישות שונות, פקודת הטרנספילציה מקבלת כקלט גם את המעגלים שרוצים להריץ, וגם את ה-<code>backend</code> שעליו מתכוונים להריץ.</p><p id="5b3e20b4-ce88-4554-a832-9d52b97189fd" class="">נמחיש זאת עם קובץ הדוגמא שאיתו התחלנו, בגרסה שניתן להריץ על מחשב קוונטי:</p><pre id="561508d4-0cf2-4037-a080-8dd583e0a309" class="code"><code>from qiskit import QuantumCircuit, IBMQ, transpile
+from qiskit.providers.ibmq import least_busy
+
+circuit = QuantumCircuit(2)
+circuit.h(0)
+circuit.cx(0,1)
+circuit.measure_all()
+
+IBMQ.load_account()
+provider = IBMQ.get_provider(hub=&#x27;ibm-q&#x27;, group=&#x27;open&#x27;, project=&#x27;main&#x27;)
+backend = least_busy(provider.backends(simulator=False, min_num_qubits=5))
+
+circuit = transpile(circuit, backend)
+counts = backend.run(circuit).result().get_counts()
+
+print(circuit)
+print(counts)</code></pre><p id="9fcffbec-c3e9-465c-9aaf-412a7231d5c7" class="">תוצאת הרצה זו היא</p><pre id="c15ea222-7a02-4719-9221-364b90faa1cf" class="code"><code>global phase: π/4
+               ┌─────────┐┌────┐┌─────────┐      ░ ┌─┐
+      q_0 -&gt; 0 ┤ Rz(π/2) ├┤ √X ├┤ Rz(π/2) ├──■───░─┤M├───
+               └─────────┘└────┘└─────────┘┌─┴─┐ ░ └╥┘┌─┐
+      q_1 -&gt; 1 ────────────────────────────┤ X ├─░──╫─┤M├
+                                           └───┘ ░  ║ └╥┘
+ancilla_0 -&gt; 2 ─────────────────────────────────────╫──╫─
+                                                    ║  ║
+ancilla_1 -&gt; 3 ─────────────────────────────────────╫──╫─
+                                                    ║  ║
+ancilla_2 -&gt; 4 ─────────────────────────────────────╫──╫─
+                                                    ║  ║
+       meas: 2/═════════════════════════════════════╩══╩═
+                                                    0  1
+{&#x27;00&#x27;: 1895, &#x27;01&#x27;: 83, &#x27;10&#x27;: 94, &#x27;11&#x27;: 1928}</code></pre><p id="948b9126-0096-4aec-9c22-b95256a8636e" class="">כפי שניתן לראות, המעגל השתנה בצורה מוזרה, ובנוסף לכך תוצאות המדידה הן שונות, גם במספרן וגם בכך שהופיעו התוצאות “01” ו”10” שלא היו אמורות להתקבל כלל. הסיבה שבגללה הן מופיעות היא קיום <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>רעשים קוונטיים</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong> שמקלקלים את תהליך החישוב; עבור המעגלים שלנו האפקט זניח למדי אבל עבור מעגלים גדולים הוא לעתים קרובות הרסני - זה המכשול המרכזי שעומד בימינו בפני חישוב קוונטי.</p><p id="ad06ccc3-6c6e-45e5-a143-e08bac1d7c32" class=""><strong>תרגיל אתגר: </strong>בדקו כי האלגוריתמים שמימשתם ממשיכים לעבוד גם כאשר הם מורצים על מחשב קוונטי אמיתי, למרות הרעשים; הדבר עשוי להצריך עיבוד נוסף של התוצאות שקיבלתם.</p></div></article></body></html>
